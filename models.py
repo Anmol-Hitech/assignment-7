@@ -23,6 +23,7 @@ class Student(Base):
     __tablename__="students"
     id:Mapped[int]=mapped_column(primary_key=True,nullable=False,index=True)
     name:Mapped[str]=mapped_column(nullable=False)
+    email:Mapped[str]=mapped_column(unique=True,nullable=False)
     grade:Mapped[str]=mapped_column(nullable=False,default=None)
-    created_by: Mapped["User"] = mapped_column(ForeignKey('users.id',ondelete="CASCADE"))
+    created_by: Mapped[int] = mapped_column(ForeignKey('users.id',ondelete="CASCADE"))
     users:Mapped[User]=relationship("User",back_populates="students")

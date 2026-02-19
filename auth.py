@@ -46,3 +46,8 @@ def get_current_user(
     
     return user
 
+def role_required(required_role: str,current_user: User = Depends(get_current_user)):
+    if current_user.role != required_role:
+        raise HTTPException(status_code=403, detail="Access Denied")
+    return current_user
+

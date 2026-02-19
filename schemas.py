@@ -6,6 +6,7 @@ class CreateUser(BaseModel):
     password:str
     role:str
     grade:Optional[str] | None ="P"
+    teacher_id:Optional[int] | None=None
 
 class AdminLogin(BaseModel):
     name:str
