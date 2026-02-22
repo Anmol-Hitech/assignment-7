@@ -2,7 +2,7 @@ from pydantic import BaseModel,EmailStr
 from typing import List,Optional
 class CreateUser(BaseModel):
     username:str
-    email:EmailStr
+    email:EmailStr | None=None
     password:str
     role:str
     grade:Optional[str] | None ="P"
@@ -10,11 +10,15 @@ class CreateUser(BaseModel):
 
 class AdminLogin(BaseModel):
     name:str
-    email:EmailStr
+    email:str
     password:str
     role:str
 class StudentRes(BaseModel):
     name:str
     grade:str
+
 class CustomRes(BaseModel):
     data:List[StudentRes]
+
+class ProfileRes(BaseModel):
+    name:str
