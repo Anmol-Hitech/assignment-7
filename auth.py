@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from jose import JWTError
 from models import User
 from database import get_db
+from sqlalchemy import select
 
 def create_access_token(data:dict):
     to_encode=data.copy()
@@ -28,7 +29,7 @@ def verify_password(plain_password:str,hashed_password:str):
     )
 
 oauth2_scheme=OAuth2PasswordBearer(tokenUrl="login")
-def get_current_user(
+async def get_current_user(
     token:str = Depends(oauth2_scheme),db:Session=Depends(get_db)
 ):
     try:
@@ -40,7 +41,10 @@ def get_current_user(
             raise HTTPException(status_code=401,detail="Invalid token")
     except JWTError:
         raise HTTPException(status_code=401,detail="Invalid token")
-    user=db.query(User).filter(User.email==email).first()
+    result = await db.execute(
+        select(User).where(User.email == email)
+    )
+    user = result.scalars().first()
     if not user:
         raise HTTPException(status_code=400,detail="Not found")
     
